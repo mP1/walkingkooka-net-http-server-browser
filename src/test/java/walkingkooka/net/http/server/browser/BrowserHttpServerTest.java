@@ -48,38 +48,49 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpServer>, ToStringTesting<BrowserHttpServer> {
 
-    private final BiConsumer<HttpRequest, HttpResponse> PROCESSOR = (request, response) -> {
+    private final static BiConsumer<HttpRequest, HttpResponse> PROCESSOR = (request, response) -> {
         throw new UnsupportedOperationException();
     };
 
-    private final Predicate<MessageEvent<String>> MESSAGE_FILTER = Predicates.always();
+    private final static Predicate<MessageEvent<String>> MESSAGE_FILTER = Predicates.always();
+    private final static String TARGET_ORIGIN = "*";
 
     @Test
     public void testWithNullProcessorFails() {
-        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(null, new TestMessagePort(), MESSAGE_FILTER));
+        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(null, new TestMessagePort(), MESSAGE_FILTER, TARGET_ORIGIN));
     }
 
     @Test
     public void testWithNullMessagePortFails() {
-        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(PROCESSOR, null, MESSAGE_FILTER));
+        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(PROCESSOR, null, MESSAGE_FILTER, TARGET_ORIGIN));
     }
 
     @Test
     public void testWithNullMessageFilterFails() {
-        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(PROCESSOR, new TestMessagePort(), null));
+        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(PROCESSOR, new TestMessagePort(), null, TARGET_ORIGIN));
+    }
+
+    @Test
+    public void testWithNullTargetOriginFails() {
+        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(PROCESSOR, new TestMessagePort(), MESSAGE_FILTER, null));
+    }
+
+    @Test
+    public void testWithEmptyTargetOriginFails() {
+        assertThrows(IllegalArgumentException.class, () -> BrowserHttpServer.with(PROCESSOR, new TestMessagePort(), MESSAGE_FILTER, ""));
     }
 
     @Test
     public void testStart() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER);
+        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER, TARGET_ORIGIN);
         server.start();
     }
 
     @Test
     public void testStartTwiceFails() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER);
+        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER, TARGET_ORIGIN);
         server.start();
         assertThrows(IllegalStateException.class, () -> server.start());
     }
@@ -87,14 +98,14 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
     @Test
     public void testStopWithStartFails() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER);
+        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER, TARGET_ORIGIN);
         assertThrows(IllegalStateException.class, () -> server.stop());
     }
 
     @Test
     public void testStop() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER);
+        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER, TARGET_ORIGIN);
         server.start();
         server.stop();
     }
@@ -102,7 +113,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
     @Test
     public void testStopTwiceFails() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER);
+        final BrowserHttpServer server = BrowserHttpServer.with(PROCESSOR, port, MESSAGE_FILTER, TARGET_ORIGIN);
         server.start();
         server.stop();
         assertThrows(IllegalStateException.class, () -> server.stop());
@@ -159,7 +170,8 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
 
                     // the first message will be a HttpRequest, the next will be the HttpResponse sent back which we want to ignore.
                     int counter;
-                });
+                },
+                "*");
 
         server.start();
 
@@ -192,7 +204,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
 
     @Test
     public void testToString() {
-        this.toStringAndCheck(BrowserHttpServer.with(PROCESSOR, new TestMessagePort(), MESSAGE_FILTER), PROCESSOR.toString());
+        this.toStringAndCheck(BrowserHttpServer.with(PROCESSOR, new TestMessagePort(), MESSAGE_FILTER, TARGET_ORIGIN), PROCESSOR.toString());
     }
 
     // ClassTesting.....................................................................................................
