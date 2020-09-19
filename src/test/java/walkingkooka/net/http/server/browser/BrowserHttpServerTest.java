@@ -188,7 +188,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         }, false);
 
         final String request = "GET /path1/file2 HTTP/1.0\r\nContent-Length: 1\r\nContent-Type: text/plain\r\n\r\nBody1234";
-        window.postMessage(request);
+        DomGlobal.postMessage(request, "*");
 
         return new Promise<Void>(
                 (resolve, reject) -> {
