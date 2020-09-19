@@ -33,10 +33,14 @@ import java.util.function.Predicate;
  */
 public final class BrowserHttpServers implements PublicStaticHelper {
 
+    /**
+     * {@see BrowserHttpServer}
+     */
     public static HttpServer messagePort(final BiConsumer<HttpRequest, HttpResponse> processor,
                                          final MessagePort port,
-                                         final Predicate<MessageEvent<String>> messageFilter) {
-        return BrowserHttpServer.with(processor, port, messageFilter);
+                                         final Predicate<MessageEvent<String>> messageFilter,
+                                         final String postMessageTargetOrigin) {
+        return BrowserHttpServer.with(processor, port, messageFilter, postMessageTargetOrigin);
     }
 
     /**

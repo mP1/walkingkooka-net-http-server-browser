@@ -62,7 +62,8 @@ public final class JunitTest {
 
                     // the first message will be a HttpRequest, the next will be the HttpResponse sent back which we want to ignore.
                     int counter;
-                });
+                },
+                "*");
 
         server.start();
 
