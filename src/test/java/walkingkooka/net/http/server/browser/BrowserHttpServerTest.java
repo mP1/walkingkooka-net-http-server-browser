@@ -22,6 +22,7 @@ import elemental2.dom.Event;
 import elemental2.dom.EventListener;
 import elemental2.dom.MessageEvent;
 import elemental2.dom.MessagePort;
+import elemental2.dom.Window;
 import elemental2.promise.Promise;
 import jsinterop.base.Js;
 import org.junit.jupiter.api.Test;
@@ -117,6 +118,37 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         server.start();
         server.stop();
         assertThrows(IllegalStateException.class, () -> server.stop());
+    }
+
+    @Test
+    public void testHandleMessageEvent() {
+        final TestMessagePort port = new TestMessagePort();
+        final BrowserHttpServer server = BrowserHttpServer.with((request, response) -> {
+            response.setStatus(HttpStatusCode.CREATED.setMessage("Custom CREATED Message 123"));
+            response.addEntity(HttpEntity.EMPTY.setBodyText("Response-" + request.bodyText()));
+        }, port, MESSAGE_FILTER, TARGET_ORIGIN);
+        server.start();
+
+        final List<String> postedMessage = Lists.array();
+
+        final MessageEvent<String> event = new MessageEvent<String>("message");
+        event.source = new Window() {
+            @Override
+            public void postMessage(final Object message,
+                                    final String targetOrigin) {
+                postedMessage.add(message.toString());
+            }
+        };
+        event.data = "{\"body\": \"body-text-123\"}";
+
+        server.handleMessageEvent(event);
+        server.stop();
+
+        assertEquals(Lists.of("{\n" +
+                "  \"status-code\": 201,\n" +
+                "  \"status-message\": \"Custom CREATED Message 123\",\n" +
+                "  \"body\": \"Response-body-text-123\"\n" +
+                "}"), postedMessage);
     }
 
     /**

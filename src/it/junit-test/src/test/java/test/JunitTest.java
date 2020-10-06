@@ -35,6 +35,7 @@ import walkingkooka.net.http.server.HttpRequest;
 import walkingkooka.net.http.server.HttpResponse;
 import walkingkooka.net.http.server.HttpServer;
 import walkingkooka.net.http.server.browser.BrowserHttpServers;
+import walkingkooka.tree.json.JsonNode;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -75,23 +76,43 @@ public final class JunitTest {
             public void handleEvent(final Event event) {
                 final MessageEvent<String> messageEvent = Js.cast(event);
                 DomGlobal.console.log("window message handleEvent: " + messageEvent.data);
-                messages.add(messageEvent.data);
+                messages.add(pretty(messageEvent.data));
             }
         }, false);
 
-        final String request = "GET /path1/file2 HTTP/1.0\r\nContent-Length: 1\r\nContent-Type: text/plain\r\n\r\nBody1234";
-        final String response = "HTTP/1.0 999 Custom Status Message\r\nServer: TestMessageServer\r\n\r\nResponse-Body1234";
+        final String request = "{\n" +
+                "  \"version\": \"HTTP/1.0\",\n" +
+                "  \"method\": \"POST\",\n" +
+                "  \"headers\": {\n" +
+                "    \"Content-Type\": \"text/plain\",\n" +
+                "    \"Content-Length\": 123\n" +
+                "  },\n" +
+                "  \"body\": \"Body123\"\n" +
+                "}";
+        final String response = "{\n" +
+                "  \"version\": \"HTTP/1.0\",\n" +
+                "  \"status-code\": 999,\n" +
+                "  \"status-message\": \"Custom Status Message\",\n" +
+                "  \"headers\": {\n" +
+                "    \"Server\": \"TestMessageServer\"\n" +
+                "  },\n" +
+                "  \"body\": \"Response-Body123\"\n" +
+                "}";
 
         DomGlobal.postMessage(request, "*");
 
         return new Promise<Void>(
                 (resolve, reject) -> {
                     DomGlobal.setTimeout((ignored) -> {
-                                Assert.assertEquals(Lists.of(request, response), messages);
+                                Assert.assertEquals(Lists.of(pretty(request), pretty(response)), messages);
                                 server.stop();
                                 resolve.onInvoke((Void) null);
                             },
                             500);
                 });
+    }
+
+    private static String pretty(final String json) {
+        return JsonNode.parse(json).toString();
     }
 }

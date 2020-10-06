@@ -30,6 +30,7 @@ import walkingkooka.net.http.server.HttpResponse;
 import walkingkooka.net.http.server.HttpResponses;
 import walkingkooka.net.http.server.HttpServer;
 import walkingkooka.text.CharSequences;
+import walkingkooka.tree.json.JsonNode;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -109,11 +110,12 @@ final class BrowserHttpServer implements HttpServer {
      * Before handling the message as a {@link }HttpRequest} the message filter predicate is used to test the message.
      * This allows the message.origin to be tested and more.
      */
-    private void handleMessageEvent(final MessageEvent<String> event) {
+    // @VisibleForTesting
+    void handleMessageEvent(final MessageEvent<String> event) {
         if (this.messageFilter.test(event)) {
             // inputs
-            final HttpRequest request = HttpRequests.parse(HttpTransport.SECURED, event.data);
-            final HttpResponse response = HttpResponses.recording();
+            final HttpRequest request = BrowserHttpServerHttpRequest.with(JsonNode.parse(event.data).objectOrFail());
+            final HttpResponse response = BrowserHttpServerHttpResponse.empty();
 
             // process
             this.processor.accept(request, response);

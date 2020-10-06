@@ -14,6 +14,34 @@ way to integrate a pure javascript application with transpiled j2cl cutting out 
 
 
 
+The request posted to the webworker must be in JSON form and is easily tranformed from a fetch request.
+
+```json
+{
+  "version": "HTTP/1.0",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "text/plain",
+    "Content-Length": 123
+  },
+  "body": "abc123"
+}
+``` 
+
+The message posted back is a response in JSON form.
+```json
+{
+  "status-code": 400,
+  "status-message": "Bad request 123",
+  "headers": {
+    "Content-Length": "1",
+    "Content-Type": "text/plain123"
+  },
+  "body": "Body123"
+}
+```
+
+
 ## Getting the source
 
 You can either download the source using the "ZIP" button at the top
