@@ -152,7 +152,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
 
         this.check(response, "{\n" +
                 "  \"headers\": {\n" +
-                "    \"Content-Length\": \"1\"\n" +
+                "    \"Content-Length\": 1\n" +
                 "  }\n" +
                 "}");
     }
@@ -167,7 +167,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
         this.check(response, "{\n" +
                 "  \"headers\": {\n" +
                 "    \"Content-Type\": \"text/plain\",\n" +
-                "    \"Content-Length\": \"1\"\n" +
+                "    \"Content-Length\": 1\n" +
                 "  }\n" +
                 "}");
     }
@@ -181,7 +181,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
 
         this.check(response, "{\n" +
                 "  \"headers\": {\n" +
-                "    \"Content-Length\": \"1\",\n" +
+                "    \"Content-Length\": 1,\n" +
                 "    \"Content-Type\": \"text/plain\"\n" +
                 "  }\n" +
                 "}");
@@ -208,7 +208,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
                 "  \"status-code\": 400,\n" +
                 "  \"status-message\": \"Bad request 123\",\n" +
                 "  \"headers\": {\n" +
-                "    \"Content-Length\": \"1\",\n" +
+                "    \"Content-Length\": 1,\n" +
                 "    \"Content-Type\": \"text/plain123\"\n" +
                 "  },\n" +
                 "  \"body\": \"Body123\"\n" +
