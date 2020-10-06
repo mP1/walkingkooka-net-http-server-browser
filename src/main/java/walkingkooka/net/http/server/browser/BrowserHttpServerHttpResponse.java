@@ -109,8 +109,12 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
                 case 0:
                     break;
                 case 1:
-                    final String headerValueText = header.headerText(Cast.to(values.get(0)));
-                    headers.add(JsonNode.string(headerValueText).setName(JsonPropertyName.with(header.value())));
+                    final Object value = values.get(0);
+                    final JsonNode valueJsonNode = value instanceof Number ?
+                            JsonNode.number(((Number) value).doubleValue()) :
+                            JsonNode.string(header.headerText(Cast.to(value)));
+
+                    headers.add(valueJsonNode.setName(JsonPropertyName.with(header.value())));
                     break;
                 default:
                     throw new IllegalArgumentException("Header " + header + " contains " + valueCount + " values only 1 supported=" + values);

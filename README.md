@@ -34,7 +34,7 @@ The message posted back is a response in JSON form.
   "status-code": 400,
   "status-message": "Bad request 123",
   "headers": {
-    "Content-Length": "1",
+    "Content-Length": 9,
     "Content-Type": "text/plain123"
   },
   "body": "Body123"
