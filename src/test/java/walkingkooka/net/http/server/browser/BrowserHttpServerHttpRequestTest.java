@@ -49,8 +49,18 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     }
 
     private void methodAndCheck(final HttpMethod method) {
-        final BrowserHttpServerHttpRequest request = this.parse("{ \"method\": \"" + method + "\" }");
-        assertEquals(method, request.method(), () -> request.toString());
+        this.methodAndCheck("{ \"method\": \"" + method + "\" }", method);
+    }
+
+    @Test
+    public void testMethodMissingDefaultsGET() {
+        this.methodAndCheck("{}", HttpMethod.GET);
+    }
+
+    private void methodAndCheck(final String request,
+                                final HttpMethod method) {
+        final BrowserHttpServerHttpRequest httpRequest = this.parse(request);
+        assertEquals(method, httpRequest.method(), () -> request);
     }
 
     @Test

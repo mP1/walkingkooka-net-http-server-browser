@@ -30,6 +30,7 @@ import walkingkooka.net.http.server.HttpRequestParameterName;
 import walkingkooka.tree.json.JsonNode;
 import walkingkooka.tree.json.JsonObject;
 import walkingkooka.tree.json.JsonPropertyName;
+import walkingkooka.tree.json.JsonString;
 
 import java.util.List;
 import java.util.Map;
@@ -84,11 +85,11 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
 
     @Override
     public HttpMethod method() {
-        return HttpMethod.with(this.json.getOrFail(METHOD).stringValueOrFail());
+        return HttpMethod.with(this.json.get(METHOD).orElse(GET).stringValueOrFail());
     }
 
     private final JsonPropertyName METHOD = JsonPropertyName.with("method");
-
+    private final JsonString GET = JsonNode.string(HttpMethod.GET.value());
 
     @Override
     public Map<HttpHeaderName<?>, List<?>> headers() {
