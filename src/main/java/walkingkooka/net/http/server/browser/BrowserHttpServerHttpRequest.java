@@ -21,6 +21,7 @@ import walkingkooka.collect.list.Lists;
 import walkingkooka.net.RelativeUrl;
 import walkingkooka.net.Url;
 import walkingkooka.net.header.HttpHeaderName;
+import walkingkooka.net.http.HttpEntity;
 import walkingkooka.net.http.HttpMethod;
 import walkingkooka.net.http.HttpProtocolVersion;
 import walkingkooka.net.http.HttpTransport;
@@ -106,6 +107,11 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
     @Override
     public byte[] body() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public long bodyLength() {
+        return this.bodyText().getBytes(this.charset(HttpEntity.DEFAULT_BODY_CHARSET)).length;
     }
 
     @Override
