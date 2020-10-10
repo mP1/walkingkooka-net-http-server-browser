@@ -14,12 +14,15 @@ way to integrate a pure javascript application with transpiled j2cl cutting out 
 
 
 
-The request posted to the webworker must be in JSON form and is easily tranformed from a fetch request.
+The request posted to the webworker must be in JSON form and is easily tranformed from a fetch request. The only
+required property in a request is the "url", method will be defauled to "GET", version will be defaulted to "HTTP/1.0",
+missing headers will result in an empty headers, and missing body will be an empty string.
 
 ```json
 {
   "version": "HTTP/1.0",
   "method": "POST",
+  "url": "/path/to/",
   "headers": {
     "Content-Type": "text/plain",
     "Content-Length": 123
