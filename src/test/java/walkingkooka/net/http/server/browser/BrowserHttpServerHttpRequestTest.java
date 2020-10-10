@@ -135,6 +135,21 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     }
 
     @Test
+    public void testBodyLength() {
+        assertEquals(6L, this.parse("{\"headers\": {}, \"body\": \"abc123\"}").bodyLength());
+    }
+
+    @Test
+    public void testBodyLengthContentTypeUtf8() {
+        assertEquals(6L, this.parse("{\"headers\": {\"Content-Type\": \"text/plain;charset=UTF8\"}, \"body\": \"abc123\"}").bodyLength());
+    }
+
+    @Test
+    public void testBodyLengthContentTypeUtf16() {
+        assertEquals(14L, this.parse("{\"headers\": {\"Content-Type\": \"text/plain;charset=UTF16\"}, \"body\": \"abc123\"}").bodyLength());
+    }
+
+    @Test
     public void testParametersFails() {
         assertThrows(UnsupportedOperationException.class, () -> this.parse("{}").parameters());
     }
