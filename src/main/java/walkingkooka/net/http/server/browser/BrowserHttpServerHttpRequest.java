@@ -94,7 +94,9 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
     @Override
     public Map<HttpHeaderName<?>, List<?>> headers() {
         if (null == this.headers) {
-            this.headers = BrowserHttpServerHttpRequestHeadersMap.with(this.json.getOrFail(HEADERS).objectOrFail());
+            this.headers = BrowserHttpServerHttpRequestHeadersMap.with(this.json.get(HEADERS)
+                    .orElse(JsonNode.object())
+                    .objectOrFail());
         }
         return this.headers;
     }

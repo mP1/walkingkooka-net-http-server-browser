@@ -96,6 +96,14 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     }
 
     @Test
+    public void testHeadersMissing() {
+        final BrowserHttpServerHttpRequest request = this.parse("{}");
+        assertEquals(Lists.empty(),
+                request.headers().get(HttpHeaderName.CONTENT_TYPE),
+                () -> request.toString());
+    }
+
+    @Test
     public void testHeaderAbsent() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"headers\": {\"Content-Length\": 123}}");
         assertEquals(Lists.empty(),
