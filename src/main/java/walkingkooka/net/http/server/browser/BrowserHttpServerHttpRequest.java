@@ -71,10 +71,11 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
 
     @Override
     public HttpProtocolVersion protocolVersion() {
-        return HttpProtocolVersion.with(this.json.getOrFail(VERSION).stringValueOrFail());
+        return HttpProtocolVersion.with(this.json.get(VERSION).orElse(HTTP10).stringValueOrFail());
     }
 
     private final static JsonPropertyName VERSION = JsonPropertyName.with("version");
+    private final static JsonString HTTP10 = JsonNode.string(HttpProtocolVersion.VERSION_1_0.value());
 
     @Override
     public RelativeUrl url() {
