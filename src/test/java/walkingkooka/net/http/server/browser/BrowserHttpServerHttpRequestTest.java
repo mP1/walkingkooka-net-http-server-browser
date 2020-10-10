@@ -89,10 +89,20 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     }
 
     private void versionAndCheck(final HttpProtocolVersion version) {
-        final BrowserHttpServerHttpRequest request = this.parse("{ \"version\": \"" + version + "\" }");
+        this.versionAndCheck("{ \"version\": \"" + version + "\" }", version);
+    }
+
+    @Test
+    public void testVersionMissingDefaultsHttp10() {
+        this.versionAndCheck("{}", HttpProtocolVersion.VERSION_1_0);
+    }
+
+    private void versionAndCheck(final String request,
+                                 final HttpProtocolVersion version) {
+        final BrowserHttpServerHttpRequest httpRequest = this.parse(request);
         assertEquals(version,
-                request.protocolVersion(),
-                () -> request.toString());
+                httpRequest.protocolVersion(),
+                () -> request);
     }
 
     @Test
