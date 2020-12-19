@@ -82,7 +82,7 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
     }
 
     private static HttpStatus status0(final JsonNode node) {
-        return HttpStatusCode.withCode(node.numberValueOrFail().intValue())
+        return HttpStatusCode.withCode(node.numberOrFail().intValue())
                 .setMessage(node.parentOrFail().objectOrFail().getOrFail(STATUS_MESSAGE).stringValueOrFail());
     }
 
