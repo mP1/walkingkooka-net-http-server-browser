@@ -71,7 +71,7 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
 
     @Override
     public HttpProtocolVersion protocolVersion() {
-        return HttpProtocolVersion.with(this.json.get(VERSION).orElse(HTTP10).stringValueOrFail());
+        return HttpProtocolVersion.with(this.json.get(VERSION).orElse(HTTP10).stringOrFail());
     }
 
     private final static JsonPropertyName VERSION = JsonPropertyName.with("version");
@@ -79,14 +79,14 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
 
     @Override
     public RelativeUrl url() {
-        return Url.parseRelative(this.json.getOrFail(URL).stringValueOrFail());
+        return Url.parseRelative(this.json.getOrFail(URL).stringOrFail());
     }
 
     private final static JsonPropertyName URL = JsonPropertyName.with("url");
 
     @Override
     public HttpMethod method() {
-        return HttpMethod.with(this.json.get(METHOD).orElse(GET).stringValueOrFail());
+        return HttpMethod.with(this.json.get(METHOD).orElse(GET).stringOrFail());
     }
 
     private final JsonPropertyName METHOD = JsonPropertyName.with("method");
@@ -121,7 +121,7 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
     @Override
     public String bodyText() {
         return this.json.get(BODY)
-                .map(JsonNode::stringValueOrFail)
+                .map(JsonNode::stringOrFail)
                 .orElse("");
     }
 

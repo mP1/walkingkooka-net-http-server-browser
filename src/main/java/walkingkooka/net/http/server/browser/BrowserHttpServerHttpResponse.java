@@ -61,7 +61,7 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
     }
 
     private static HttpProtocolVersion version0(final JsonNode node) {
-        return HttpProtocolVersion.with(node.stringValueOrFail());
+        return HttpProtocolVersion.with(node.stringOrFail());
     }
 
     private final static JsonPropertyName VERSION = JsonPropertyName.with("version");
@@ -83,7 +83,7 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
 
     private static HttpStatus status0(final JsonNode node) {
         return HttpStatusCode.withCode(node.numberOrFail().intValue())
-                .setMessage(node.parentOrFail().objectOrFail().getOrFail(STATUS_MESSAGE).stringValueOrFail());
+                .setMessage(node.parentOrFail().objectOrFail().getOrFail(STATUS_MESSAGE).stringOrFail());
     }
 
     private final static JsonPropertyName STATUS_CODE = JsonPropertyName.with("status-code");
@@ -149,7 +149,7 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
 
         final Optional<JsonNode> bodyText = object.get(BODY);
         if (bodyText.isPresent()) {
-            entity = entity.setBodyText(bodyText.get().stringValueOrFail());
+            entity = entity.setBodyText(bodyText.get().stringOrFail());
         }
 
         return entity.isEmpty() ?
