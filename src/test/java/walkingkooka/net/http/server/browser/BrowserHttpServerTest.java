@@ -144,7 +144,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         server.handleMessageEvent(event);
         server.stop();
 
-        assertEquals(Lists.of("{\n" +
+        this.checkEquals(Lists.of("{\n" +
                 "  \"status-code\": 201,\n" +
                 "  \"status-message\": \"Custom CREATED Message 123\",\n" +
                 "  \"body\": \"Response-body-text-123\"\n" +
@@ -226,7 +226,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
                 (resolve, reject) -> {
                     DomGlobal.setTimeout((ignored) -> {
                                 final String response = "HTTP/1.0 999 Custom Status Message\r\nServer: TestMessageServer\r\n\r\nResponse-Body1234";
-                                assertEquals(Lists.of(request, response), messages);
+                                this.checkEquals(Lists.of(request, response), messages);
                                 server.stop();
                                 resolve.onInvoke((Void) null);
                             },
