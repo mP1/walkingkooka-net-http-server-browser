@@ -60,7 +60,7 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     private void methodAndCheck(final String request,
                                 final HttpMethod method) {
         final BrowserHttpServerHttpRequest httpRequest = this.parse(request);
-        assertEquals(method, httpRequest.method(), () -> request);
+        this.checkEquals(method, httpRequest.method(), () -> request);
     }
 
     @Test
@@ -75,7 +75,7 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
 
     private void urlAndCheck(final String url) {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"url\": \"" + url + "\" }");
-        assertEquals(Url.parseRelative(url), request.url(), () -> request.toString());
+        this.checkEquals(Url.parseRelative(url), request.url(), () -> request.toString());
     }
 
     @Test
@@ -100,7 +100,7 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     private void versionAndCheck(final String request,
                                  final HttpProtocolVersion version) {
         final BrowserHttpServerHttpRequest httpRequest = this.parse(request);
-        assertEquals(version,
+        this.checkEquals(version,
                 httpRequest.protocolVersion(),
                 () -> request);
     }
@@ -108,7 +108,7 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     @Test
     public void testHeadersMissing() {
         final BrowserHttpServerHttpRequest request = this.parse("{}");
-        assertEquals(Lists.empty(),
+        this.checkEquals(Lists.empty(),
                 request.headers().get(HttpHeaderName.CONTENT_TYPE),
                 () -> request.toString());
     }
@@ -116,7 +116,7 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     @Test
     public void testHeaderAbsent() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"headers\": {\"Content-Length\": 123}}");
-        assertEquals(Lists.empty(),
+        this.checkEquals(Lists.empty(),
                 request.headers().get(HttpHeaderName.CONTENT_TYPE),
                 () -> request.toString());
     }
@@ -124,7 +124,7 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     @Test
     public void testHeaderNumericValue() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"headers\": {\"Content-Length\": 123}}");
-        assertEquals(Lists.of(123L),
+        this.checkEquals(Lists.of(123L),
                 request.headers().get(HttpHeaderName.CONTENT_LENGTH),
                 () -> request.toString());
     }
@@ -132,7 +132,7 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     @Test
     public void testHeaderStringValue() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"headers\": {\"Content-Type\": \"text/plain\"}}");
-        assertEquals(Lists.of(MediaType.TEXT_PLAIN),
+        this.checkEquals(Lists.of(MediaType.TEXT_PLAIN),
                 request.headers().get(HttpHeaderName.CONTENT_TYPE),
                 () -> request.toString());
     }
@@ -140,13 +140,13 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     @Test
     public void testHeaders() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"method\": \"POST\", \"headers\": {\"Content-Type\": \"text/plain\", \"Content-Length\": 123}}");
-        assertEquals(HttpMethod.POST,
+        this.checkEquals(HttpMethod.POST,
                 request.method(),
                 () -> request.toString());
-        assertEquals(Lists.of(MediaType.TEXT_PLAIN),
+        this.checkEquals(Lists.of(MediaType.TEXT_PLAIN),
                 request.headers().get(HttpHeaderName.CONTENT_TYPE),
                 () -> request.toString());
-        assertEquals(Lists.of(123L),
+        this.checkEquals(Lists.of(123L),
                 request.headers().get(HttpHeaderName.CONTENT_LENGTH),
                 () -> request.toString());
     }
@@ -154,7 +154,7 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     @Test
     public void testBodyText() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"body\": \"abc123\"}");
-        assertEquals("abc123", request.bodyText());
+        this.checkEquals("abc123", request.bodyText());
     }
 
     @Test
@@ -164,17 +164,17 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
 
     @Test
     public void testBodyLength() {
-        assertEquals(6L, this.parse("{\"headers\": {}, \"body\": \"abc123\"}").bodyLength());
+        this.checkEquals(6L, this.parse("{\"headers\": {}, \"body\": \"abc123\"}").bodyLength());
     }
 
     @Test
     public void testBodyLengthContentTypeUtf8() {
-        assertEquals(6L, this.parse("{\"headers\": {\"Content-Type\": \"text/plain;charset=UTF8\"}, \"body\": \"abc123\"}").bodyLength());
+        this.checkEquals(6L, this.parse("{\"headers\": {\"Content-Type\": \"text/plain;charset=UTF8\"}, \"body\": \"abc123\"}").bodyLength());
     }
 
     @Test
     public void testBodyLengthContentTypeUtf16() {
-        assertEquals(14L, this.parse("{\"headers\": {\"Content-Type\": \"text/plain;charset=UTF16\"}, \"body\": \"abc123\"}").bodyLength());
+        this.checkEquals(14L, this.parse("{\"headers\": {\"Content-Type\": \"text/plain;charset=UTF16\"}, \"body\": \"abc123\"}").bodyLength());
     }
 
     @Test

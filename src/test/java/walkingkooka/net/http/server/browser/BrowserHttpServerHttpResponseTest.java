@@ -39,7 +39,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
     @Test
     public void testEmpty() {
         final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
-        assertEquals(Optional.empty(), response.version(), "version");
+        this.checkEquals(Optional.empty(), response.version(), "version");
 
         this.check(BrowserHttpServerHttpResponse.empty(),
                 "{}");
@@ -53,7 +53,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
 
         for (final HttpProtocolVersion version : HttpProtocolVersion.values()) {
             response.setVersion(version);
-            assertEquals(Optional.of(version), response.version(), "version");
+            this.checkEquals(Optional.of(version), response.version(), "version");
         }
     }
 
@@ -63,7 +63,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
 
         final HttpProtocolVersion version = HttpProtocolVersion.VERSION_1_0;
         response.setVersion(version);
-        assertEquals(Optional.of(version), response.version(), "version");
+        this.checkEquals(Optional.of(version), response.version(), "version");
 
         this.check(response,
                 "{ \"version\": \"HTTP/1.0\"}");
@@ -90,7 +90,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
             final HttpStatus status = statusCode.status();
 
             response.setStatus(status);
-            assertEquals(Optional.of(status), response.status(), "status");
+            this.checkEquals(Optional.of(status), response.status(), "status");
         }
     }
 
@@ -100,7 +100,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
 
         final HttpStatus status = HttpStatusCode.FOUND.setMessage("Custom message 123");
         response.setStatus(status);
-        assertEquals(Optional.of(status), response.status(), "status");
+        this.checkEquals(Optional.of(status), response.status(), "status");
 
         this.check(response,
                 "{ \"status-code\": 302, \"status-message\": \"Custom message 123\"}");
@@ -114,7 +114,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
 
         final HttpStatus status = HttpStatusCode.FOUND.setMessage("Custom message 123");
         response.setStatus(status);
-        assertEquals(Optional.of(status), response.status(), "status");
+        this.checkEquals(Optional.of(status), response.status(), "status");
 
         this.check(response,
                 "{ \"status-code\": 302, \"status-message\": \"Custom message 123\"}");
@@ -189,7 +189,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
 
     private void check(final BrowserHttpServerHttpResponse response,
                        final String json) {
-        assertEquals(JsonNode.parse(json),
+        this.checkEquals(JsonNode.parse(json),
                 response.object);
     }
 
