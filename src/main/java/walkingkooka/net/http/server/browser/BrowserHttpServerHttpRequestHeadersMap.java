@@ -72,14 +72,6 @@ final class BrowserHttpServerHttpRequestHeadersMap extends AbstractMap<HttpHeade
                 .orElse(Lists.empty());
     }
 
-    private List<?> Xget0(final HttpHeaderName<?> header) {
-
-
-        return this.headers.get(JsonPropertyName.with(header.value()))
-                .map(v -> get1(header, v))
-                .orElse(Lists.empty());
-    }
-
     /**
      * Parses the header value which should be a string into a typed value.
      */
