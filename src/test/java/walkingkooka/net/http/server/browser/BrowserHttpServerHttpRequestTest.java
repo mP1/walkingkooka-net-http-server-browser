@@ -27,7 +27,6 @@ import walkingkooka.net.http.HttpMethod;
 import walkingkooka.net.http.HttpProtocolVersion;
 import walkingkooka.tree.json.JsonNode;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTestCase<BrowserHttpServerHttpRequest>
