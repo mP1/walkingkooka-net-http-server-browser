@@ -130,7 +130,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
 
         final List<String> postedMessage = Lists.array();
 
-        final MessageEvent<String> event = new MessageEvent<String>("message");
+        final MessageEvent<String> event = new MessageEvent<>("message");
         event.source = new Window() {
             @Override
             public void postMessage(final Object message,
@@ -192,7 +192,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
                     resp.setStatus(HttpStatusCode.withCode(999).setMessage("Custom Status Message"));
                     resp.addEntity(HttpEntity.EMPTY.addHeader(HttpHeaderName.SERVER, "TestMessageServer").setBodyText("Response-" + req.bodyText()));
                 }, window,
-                new Predicate<MessageEvent<String>>() {
+                new Predicate<>() {
 
                     public boolean test(final MessageEvent<String> event) {
                         DomGlobal.console.log("Message filter data: " + event.data);
@@ -221,7 +221,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         final String request = "GET /path1/file2 HTTP/1.0\r\nContent-Length: 1\r\nContent-Type: text/plain\r\n\r\nBody1234";
         DomGlobal.postMessage(request, "*");
 
-        return new Promise<Void>(
+        return new Promise<>(
                 (resolve, reject) -> {
                     DomGlobal.setTimeout((ignored) -> {
                                 final String response = "HTTP/1.0 999 Custom Status Message\r\nServer: TestMessageServer\r\n\r\nResponse-Body1234";
