@@ -153,7 +153,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
     /**
      * Override the key methods that are native to make things work in a JVM.
      */
-    private class TestMessagePort extends MessagePort {
+    private static class TestMessagePort extends MessagePort {
         @Override
         public void addEventListener(final String type,
                                      final EventListener listener,
