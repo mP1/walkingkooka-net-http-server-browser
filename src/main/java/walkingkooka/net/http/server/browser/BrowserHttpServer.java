@@ -74,7 +74,7 @@ final class BrowserHttpServer implements HttpServer {
      * Starts the server by adding the message event listener.
      */
     @Override
-    public final void start() {
+    public void start() {
         if (this.running) {
             throw new IllegalStateException("Server already running");
         }
@@ -86,7 +86,7 @@ final class BrowserHttpServer implements HttpServer {
      * Stops the server by removing the message event listener.
      */
     @Override
-    public final void stop() {
+    public void stop() {
         if (false == this.running) {
             throw new IllegalStateException("Server not running");
         }
