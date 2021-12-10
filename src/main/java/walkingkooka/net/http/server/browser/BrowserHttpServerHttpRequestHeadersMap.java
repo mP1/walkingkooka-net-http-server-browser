@@ -71,14 +71,6 @@ final class BrowserHttpServerHttpRequestHeadersMap extends AbstractMap<HttpHeade
                 .orElse(Lists.empty());
     }
 
-    /**
-     * Parses the header value which should be a string into a typed value.
-     */
-    private static List<?> get1(final HttpHeaderName<?> header,
-                                final JsonNode node) {
-        return Lists.of(header.parse(node.text()));
-    }
-
     private final JsonObject headers;
 
     @Override
