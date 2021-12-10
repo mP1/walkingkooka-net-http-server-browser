@@ -21,7 +21,6 @@ import walkingkooka.collect.list.Lists;
 import walkingkooka.net.header.HttpHeaderName;
 import walkingkooka.tree.json.JsonNode;
 import walkingkooka.tree.json.JsonObject;
-import walkingkooka.tree.json.JsonPropertyName;
 
 import java.util.AbstractMap;
 import java.util.List;
