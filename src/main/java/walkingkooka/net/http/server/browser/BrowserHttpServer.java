@@ -23,6 +23,7 @@ import elemental2.dom.EventListener;
 import elemental2.dom.MessageEvent;
 import elemental2.dom.MessagePort;
 import jsinterop.base.Js;
+import walkingkooka.net.http.server.HttpHandler;
 import walkingkooka.net.http.server.HttpRequest;
 import walkingkooka.net.http.server.HttpResponse;
 import walkingkooka.net.http.server.HttpServer;
@@ -42,12 +43,12 @@ final class BrowserHttpServer implements HttpServer {
     /**
      * Creates a new {@link BrowserHttpServer}.
      */
-    static BrowserHttpServer with(final BiConsumer<HttpRequest, HttpResponse> processor,
+    static BrowserHttpServer with(final HttpHandler httpHandler,
                                   final MessagePort port,
                                   final Predicate<MessageEvent<String>> messageFilter,
                                   final String postMessageTargetOrigin) {
         return new BrowserHttpServer(
-                Objects.requireNonNull(processor, "processor"),
+                Objects.requireNonNull(httpHandler, "httpHandler"),
                 Objects.requireNonNull(port, "port"),
                 Objects.requireNonNull(messageFilter, "messageFilter"),
                 CharSequences.failIfNullOrEmpty(postMessageTargetOrigin, "postMessageTargetOrigin")
@@ -57,12 +58,12 @@ final class BrowserHttpServer implements HttpServer {
     /**
      * Use factory
      */
-    private BrowserHttpServer(final BiConsumer<HttpRequest, HttpResponse> processor,
+    private BrowserHttpServer(final HttpHandler httpHandler,
                               final MessagePort port,
                               final Predicate<MessageEvent<String>> messageFilter,
                               final String postMessageTargetOrigin) {
         super();
-        this.processor = processor;
+        this.httpHandler = httpHandler;
         this.port = port;
         this.messageFilter = messageFilter;
         this.postMessageTargetOrigin = postMessageTargetOrigin;
@@ -115,7 +116,7 @@ final class BrowserHttpServer implements HttpServer {
             final HttpResponse response = BrowserHttpServerHttpResponse.empty();
 
             // process
-            this.processor.accept(request, response);
+            this.httpHandler.handle(request, response);
 
             // outputs
             event.source.postMessage(response.toString(), this.postMessageTargetOrigin);
@@ -127,7 +128,7 @@ final class BrowserHttpServer implements HttpServer {
     /**
      * Handles the request and produces a response.
      */
-    private final BiConsumer<HttpRequest, HttpResponse> processor;
+    private final HttpHandler httpHandler;
 
     /**
      * The {@link MessagePort#postMessage(Object, Transferable[])}
@@ -136,6 +137,6 @@ final class BrowserHttpServer implements HttpServer {
     
     @Override
     public String toString() {
-        return this.processor.toString();
+        return this.httpHandler.toString();
     }
 }

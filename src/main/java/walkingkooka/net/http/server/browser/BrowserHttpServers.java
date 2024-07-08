@@ -19,6 +19,7 @@ package walkingkooka.net.http.server.browser;
 
 import elemental2.dom.MessageEvent;
 import elemental2.dom.MessagePort;
+import walkingkooka.net.http.server.HttpHandler;
 import walkingkooka.net.http.server.HttpRequest;
 import walkingkooka.net.http.server.HttpResponse;
 import walkingkooka.net.http.server.HttpServer;
@@ -36,11 +37,16 @@ public final class BrowserHttpServers implements PublicStaticHelper {
     /**
      * {@see BrowserHttpServer}
      */
-    public static HttpServer messagePort(final BiConsumer<HttpRequest, HttpResponse> processor,
+    public static HttpServer messagePort(final HttpHandler httpHandler,
                                          final MessagePort port,
                                          final Predicate<MessageEvent<String>> messageFilter,
                                          final String postMessageTargetOrigin) {
-        return BrowserHttpServer.with(processor, port, messageFilter, postMessageTargetOrigin);
+        return BrowserHttpServer.with(
+                httpHandler,
+                port,
+                messageFilter,
+                postMessageTargetOrigin
+        );
     }
 
     /**
