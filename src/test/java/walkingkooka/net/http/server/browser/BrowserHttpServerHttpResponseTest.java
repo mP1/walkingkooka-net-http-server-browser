@@ -119,35 +119,20 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
                 "{ \"status-code\": 302, \"status-message\": \"Custom message 123\"}");
     }
 
-    // addEntity........................................................................................................
+    // setEntity........................................................................................................
 
     @Test
-    public void testAddEntityTwice() {
+    public void testSetEntityEmpty() {
         final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
-        response.addEntity(HttpEntity.EMPTY.setBodyText("1"));
-
-        assertThrows(IllegalArgumentException.class, () -> response.addEntity(HttpEntity.EMPTY.setBodyText("2")));
-    }
-
-    @Test
-    public void testAddEntityHeaderWithTwoValuesFails() {
-        final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
-
-        assertThrows(IllegalArgumentException.class, () -> response.addEntity(HttpEntity.EMPTY.setHeader(HttpHeaderName.CONTENT_LENGTH, Lists.of(1L, 2L))));
-    }
-
-    @Test
-    public void testAddEntityEmpty() {
-        final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
-        response.addEntity(HttpEntity.EMPTY);
+        response.setEntity(HttpEntity.EMPTY);
 
         this.check(response, "{}");
     }
 
     @Test
-    public void testAddEntityHeader() {
+    public void testSetEntityHeader() {
         final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
-        response.addEntity(HttpEntity.EMPTY.addHeader(HttpHeaderName.CONTENT_LENGTH, 1L));
+        response.setEntity(HttpEntity.EMPTY.addHeader(HttpHeaderName.CONTENT_LENGTH, 1L));
 
         this.check(response, "{\n" +
                 "  \"headers\": {\n" +
@@ -157,9 +142,9 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
     }
 
     @Test
-    public void testAddEntityHeader2() {
+    public void testSetEntityHeader2() {
         final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
-        response.addEntity(HttpEntity.EMPTY
+        response.setEntity(HttpEntity.EMPTY
                 .addHeader(HttpHeaderName.CONTENT_TYPE, MediaType.TEXT_PLAIN)
                 .addHeader(HttpHeaderName.CONTENT_LENGTH, 1L));
 
@@ -172,9 +157,9 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
     }
 
     @Test
-    public void testAddEntityHeader3() {
+    public void testSetEntityHeader3() {
         final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
-        response.addEntity(HttpEntity.EMPTY
+        response.setEntity(HttpEntity.EMPTY
                 .addHeader(HttpHeaderName.CONTENT_LENGTH, 1L)
                 .addHeader(HttpHeaderName.CONTENT_TYPE, MediaType.TEXT_PLAIN));
 
@@ -198,7 +183,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
     public void testToString() {
         final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
         response.setStatus(HttpStatusCode.BAD_REQUEST.setMessage("Bad request 123"));
-        response.addEntity(HttpEntity.EMPTY
+        response.setEntity(HttpEntity.EMPTY
                 .addHeader(HttpHeaderName.CONTENT_LENGTH, 1L)
                 .addHeader(HttpHeaderName.CONTENT_TYPE, MediaType.parse("text/plain123"))
                 .setBodyText("Body123"));
