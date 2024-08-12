@@ -90,7 +90,7 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
     private final static JsonPropertyName STATUS_MESSAGE = JsonPropertyName.with("status-message");
 
     @Override
-    public void addEntity(final HttpEntity entity) {
+    public void setEntity(final HttpEntity entity) {
         Objects.requireNonNull(entity, "entity");
 
         JsonObject object = this.object;
@@ -134,7 +134,7 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
     }
 
     @Override
-    public List<HttpEntity> entities() {
+    public HttpEntity entity() {
         HttpEntity entity = HttpEntity.EMPTY;
 
         final JsonObject object = this.object;
@@ -152,9 +152,7 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
             entity = entity.setBodyText(bodyText.get().stringOrFail());
         }
 
-        return entity.isEmpty() ?
-                Lists.empty() :
-                Lists.of(entity);
+        return entity;
     }
 
     private final static JsonPropertyName HEADERS = JsonPropertyName.with("headers");

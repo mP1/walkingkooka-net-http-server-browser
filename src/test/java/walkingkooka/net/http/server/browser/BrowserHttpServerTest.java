@@ -125,7 +125,9 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         final TestMessagePort port = new TestMessagePort();
         final BrowserHttpServer server = BrowserHttpServer.with((request, response) -> {
             response.setStatus(HttpStatusCode.CREATED.setMessage("Custom CREATED Message 123"));
-            response.addEntity(HttpEntity.EMPTY.setBodyText("Response-" + request.bodyText()));
+            response.setEntity(
+                    HttpEntity.EMPTY.setBodyText("Response-" + request.bodyText())
+            );
         }, port, MESSAGE_FILTER, TARGET_ORIGIN);
         server.start();
 
@@ -191,7 +193,13 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         final HttpServer server = BrowserHttpServers.messagePort((req, resp) -> {
                     resp.setVersion(HttpProtocolVersion.VERSION_1_0);
                     resp.setStatus(HttpStatusCode.withCode(999).setMessage("Custom Status Message"));
-                    resp.addEntity(HttpEntity.EMPTY.addHeader(HttpHeaderName.SERVER, "TestMessageServer").setBodyText("Response-" + req.bodyText()));
+                    resp.setEntity(
+                            HttpEntity.EMPTY.addHeader(
+                                    HttpHeaderName.SERVER,
+                                    "TestMessageServer"
+                            ).setBodyText("Response-" + req.bodyText()
+                            )
+                    );
                 }, window,
                 new Predicate<>() {
 
