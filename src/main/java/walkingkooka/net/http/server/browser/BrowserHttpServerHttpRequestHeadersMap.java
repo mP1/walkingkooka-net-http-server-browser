@@ -65,7 +65,12 @@ final class BrowserHttpServerHttpRequestHeadersMap extends AbstractMap<HttpHeade
     private List<?> get0(final HttpHeaderName<?> header) {
         return this.headers.children().stream()
                 .filter(hv -> hv.name().value().equalsIgnoreCase(header.value()))
-                .map(hv -> Lists.of(header.parse(hv.text())))
+                .map(hv -> Lists.of(
+                                header.parseValue(
+                                        hv.text()
+                                )
+                        )
+                )
                 .findFirst()
                 .orElse(Lists.empty());
     }

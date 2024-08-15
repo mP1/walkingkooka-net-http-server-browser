@@ -143,7 +143,12 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
             for (final JsonNode headerAndValue : headers.get().children()) {
                 final HttpHeaderName<?> header = HttpHeaderName.with(headerAndValue.name().value());
                 final String value = headerAndValue.text();
-                entity = entity.addHeader(header, Cast.to(header.parse(value)));
+                entity = entity.addHeader(
+                        header,
+                        Cast.to(
+                                header.parseValue(value)
+                        )
+                );
             }
         }
 
