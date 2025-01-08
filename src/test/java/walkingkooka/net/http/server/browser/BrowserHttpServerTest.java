@@ -33,15 +33,12 @@ import walkingkooka.net.http.HttpEntity;
 import walkingkooka.net.http.HttpProtocolVersion;
 import walkingkooka.net.http.HttpStatusCode;
 import walkingkooka.net.http.server.HttpHandler;
-import walkingkooka.net.http.server.HttpRequest;
-import walkingkooka.net.http.server.HttpResponse;
 import walkingkooka.net.http.server.HttpServer;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.reflect.ClassTesting2;
 import walkingkooka.reflect.JavaVisibility;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.assertSame;

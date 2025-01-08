@@ -19,7 +19,6 @@ package walkingkooka.net.http.server.browser;
 
 import org.junit.jupiter.api.Test;
 import walkingkooka.ToStringTesting;
-import walkingkooka.collect.list.Lists;
 import walkingkooka.net.header.HttpHeaderName;
 import walkingkooka.net.header.MediaType;
 import walkingkooka.net.http.HttpEntity;
@@ -29,8 +28,6 @@ import walkingkooka.net.http.HttpStatusCode;
 import walkingkooka.tree.json.JsonNode;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTestCase<BrowserHttpServerHttpResponse>
         implements ToStringTesting<BrowserHttpServerHttpResponse> {
