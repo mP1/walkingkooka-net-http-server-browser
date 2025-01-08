@@ -31,7 +31,6 @@ import walkingkooka.text.CharSequences;
 import walkingkooka.tree.json.JsonNode;
 
 import java.util.Objects;
-import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 /**
@@ -134,7 +133,7 @@ final class BrowserHttpServer implements HttpServer {
      * The {@link MessagePort#postMessage(Object, Transferable[])}
      */
     private final String postMessageTargetOrigin;
-    
+
     @Override
     public String toString() {
         return this.httpHandler.toString();

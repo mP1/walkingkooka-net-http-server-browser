@@ -20,12 +20,9 @@ package walkingkooka.net.http.server.browser;
 import elemental2.dom.MessageEvent;
 import elemental2.dom.MessagePort;
 import walkingkooka.net.http.server.HttpHandler;
-import walkingkooka.net.http.server.HttpRequest;
-import walkingkooka.net.http.server.HttpResponse;
 import walkingkooka.net.http.server.HttpServer;
 import walkingkooka.reflect.PublicStaticHelper;
 
-import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 /**
