@@ -51,8 +51,15 @@ public final class JunitTest {
 
         final HttpServer server = BrowserHttpServers.messagePort((req, resp) -> {
                     resp.setVersion(HttpProtocolVersion.VERSION_1_0);
-                    resp.setStatus(HttpStatusCode.withCode(999).setMessage("Custom Status Message"));
-                    resp.addEntity(HttpEntity.EMPTY.addHeader(HttpHeaderName.SERVER, "TestMessageServer").setBodyText("Response-" + req.bodyText()));
+                    resp.setStatus(
+                            HttpStatusCode.withCode(999)
+                                    .setMessage("Custom Status Message")
+                    );
+                    resp.setEntity(
+                            HttpEntity.EMPTY.addHeader(
+                                    HttpHeaderName.SERVER,
+                                    "TestMessageServer"
+                            ).setBodyText("Response-" + req.bodyText()));
                 }, window,
                 new Predicate<MessageEvent<String>>() {
 
