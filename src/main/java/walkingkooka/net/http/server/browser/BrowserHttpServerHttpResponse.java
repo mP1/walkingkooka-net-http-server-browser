@@ -75,7 +75,7 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
 
         this.object = this.object.set(
                 STATUS_CODE,
-                JsonNode.number(status.value().code())
+                status.value().code()
         ).set(
                 STATUS_MESSAGE,
                 status.message()

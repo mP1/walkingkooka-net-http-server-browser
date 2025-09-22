@@ -30,23 +30,43 @@ public final class BrowserHttpServerHttpRequestHeadersMapTest extends BrowserHtt
 
     @Test
     public void testGetSameCase() {
-        this.getAndCheck(BrowserHttpServerHttpRequestHeadersMap.with(JsonNode.object()
-                        .set(JsonPropertyName.with(HttpHeaderName.CONTENT_LENGTH.value()), JsonNode.number(1))),
-                HttpHeaderName.CONTENT_LENGTH, Lists.of(1L));
+        this.getAndCheck(
+                BrowserHttpServerHttpRequestHeadersMap.with(JsonNode.object()
+                        .set(
+                                JsonPropertyName.with(HttpHeaderName.CONTENT_LENGTH.value()),
+                                1
+                        )
+                ),
+                HttpHeaderName.CONTENT_LENGTH,
+                Lists.of(1L)
+        );
     }
 
     @Test
     public void testGetDifferentCase() {
-        this.getAndCheck(BrowserHttpServerHttpRequestHeadersMap.with(JsonNode.object()
-                        .set(JsonPropertyName.with("content-LENGTH"), JsonNode.number(1))),
-                HttpHeaderName.CONTENT_LENGTH, Lists.of(1L));
+        this.getAndCheck(
+                BrowserHttpServerHttpRequestHeadersMap.with(JsonNode.object()
+                        .set(
+                                JsonPropertyName.with("content-LENGTH"),
+                                1
+                        )
+                ),
+                HttpHeaderName.CONTENT_LENGTH,
+                Lists.of(1L)
+        );
     }
 
     @Override
     public BrowserHttpServerHttpRequestHeadersMap createMap() {
-        return BrowserHttpServerHttpRequestHeadersMap.with(JsonNode.object()
-                .set(JsonPropertyName.with("Content-Length"), JsonNode.number(1))
-                .set(JsonPropertyName.with("Content-Type"), "text/plain")
+        return BrowserHttpServerHttpRequestHeadersMap.with(
+                JsonNode.object()
+                        .set(
+                                JsonPropertyName.with("Content-Length"),
+                                1
+                        ).set(
+                                JsonPropertyName.with("Content-Type"),
+                                "text/plain"
+                        )
         );
     }
 
