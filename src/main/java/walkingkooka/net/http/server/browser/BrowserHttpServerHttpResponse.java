@@ -52,7 +52,10 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
     public void setVersion(final HttpProtocolVersion version) {
         Objects.requireNonNull(version, "version");
 
-        this.object = this.object.set(VERSION, JsonNode.string(version.value()));
+        this.object = this.object.set(
+                VERSION,
+                version.value()
+        );
     }
 
     @Override
@@ -70,9 +73,13 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
     public void setStatus(final HttpStatus status) {
         Objects.requireNonNull(status, "status");
 
-        this.object = this.object
-                .set(STATUS_CODE, JsonNode.number(status.value().code()))
-                .set(STATUS_MESSAGE, JsonNode.string(status.message()));
+        this.object = this.object.set(
+                STATUS_CODE,
+                JsonNode.number(status.value().code())
+        ).set(
+                STATUS_MESSAGE,
+                status.message()
+        );
     }
 
     @Override

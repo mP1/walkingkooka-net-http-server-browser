@@ -46,7 +46,7 @@ public final class BrowserHttpServerHttpRequestHeadersMapTest extends BrowserHtt
     public BrowserHttpServerHttpRequestHeadersMap createMap() {
         return BrowserHttpServerHttpRequestHeadersMap.with(JsonNode.object()
                 .set(JsonPropertyName.with("Content-Length"), JsonNode.number(1))
-                .set(JsonPropertyName.with("Content-Type"), JsonNode.string("text/plain"))
+                .set(JsonPropertyName.with("Content-Type"), "text/plain")
         );
     }
 
