@@ -39,10 +39,10 @@ public final class BrowserHttpServers implements PublicStaticHelper {
                                          final Predicate<MessageEvent<String>> messageFilter,
                                          final String postMessageTargetOrigin) {
         return BrowserHttpServer.with(
-                httpHandler,
-                port,
-                messageFilter,
-                postMessageTargetOrigin
+            httpHandler,
+            port,
+            messageFilter,
+            postMessageTargetOrigin
         );
     }
 

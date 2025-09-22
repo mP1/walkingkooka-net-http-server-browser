@@ -96,8 +96,8 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
     public Map<HttpHeaderName<?>, List<?>> headers() {
         if (null == this.headers) {
             this.headers = BrowserHttpServerHttpRequestHeadersMap.with(this.json.get(HEADERS)
-                    .orElse(JsonNode.object())
-                    .objectOrFail());
+                .orElse(JsonNode.object())
+                .objectOrFail());
         }
         return this.headers;
     }
@@ -121,8 +121,8 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
     @Override
     public String bodyText() {
         return this.json.get(BODY)
-                .map(JsonNode::stringOrFail)
-                .orElse("");
+            .map(JsonNode::stringOrFail)
+            .orElse("");
     }
 
     private final static JsonPropertyName BODY = JsonPropertyName.with("body");

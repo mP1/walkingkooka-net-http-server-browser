@@ -51,10 +51,10 @@ final class BrowserHttpServerHttpRequestHeadersMapEntrySet extends AbstractSet<E
     private static Entry<HttpHeaderName<?>, List<?>> mapper(final JsonNode node) {
         final HttpHeaderName<?> headerName = HttpHeaderName.with(node.name().value());
         return Maps.entry(
-                headerName,
-                Lists.of(
-                        headerName.parseValue(node.text())
-                )
+            headerName,
+            Lists.of(
+                headerName.parseValue(node.text())
+            )
         );
     }
 
