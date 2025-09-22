@@ -47,10 +47,10 @@ final class BrowserHttpServer implements HttpServer {
                                   final Predicate<MessageEvent<String>> messageFilter,
                                   final String postMessageTargetOrigin) {
         return new BrowserHttpServer(
-                Objects.requireNonNull(httpHandler, "httpHandler"),
-                Objects.requireNonNull(port, "port"),
-                Objects.requireNonNull(messageFilter, "messageFilter"),
-                CharSequences.failIfNullOrEmpty(postMessageTargetOrigin, "postMessageTargetOrigin")
+            Objects.requireNonNull(httpHandler, "httpHandler"),
+            Objects.requireNonNull(port, "port"),
+            Objects.requireNonNull(messageFilter, "messageFilter"),
+            CharSequences.failIfNullOrEmpty(postMessageTargetOrigin, "postMessageTargetOrigin")
         );
     }
 

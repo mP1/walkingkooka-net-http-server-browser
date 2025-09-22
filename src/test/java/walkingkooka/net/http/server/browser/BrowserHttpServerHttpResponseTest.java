@@ -30,7 +30,7 @@ import walkingkooka.tree.json.JsonNode;
 import java.util.Optional;
 
 public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTestCase<BrowserHttpServerHttpResponse>
-        implements ToStringTesting<BrowserHttpServerHttpResponse> {
+    implements ToStringTesting<BrowserHttpServerHttpResponse> {
 
     @Test
     public void testEmpty() {
@@ -38,7 +38,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
         this.checkEquals(Optional.empty(), response.version(), "version");
 
         this.check(BrowserHttpServerHttpResponse.empty(),
-                "{}");
+            "{}");
     }
 
     // version..........................................................................................................
@@ -62,7 +62,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
         this.checkEquals(Optional.of(version), response.version(), "version");
 
         this.check(response,
-                "{ \"version\": \"HTTP/1.0\"}");
+            "{ \"version\": \"HTTP/1.0\"}");
     }
 
     @Test
@@ -73,7 +73,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
         response.setVersion(HttpProtocolVersion.VERSION_1_1);
 
         this.check(response,
-                "{ \"version\": \"HTTP/1.1\"}");
+            "{ \"version\": \"HTTP/1.1\"}");
     }
 
     // status..........................................................................................................
@@ -99,7 +99,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
         this.checkEquals(Optional.of(status), response.status(), "status");
 
         this.check(response,
-                "{ \"status-code\": 302, \"status-message\": \"Custom message 123\"}");
+            "{ \"status-code\": 302, \"status-message\": \"Custom message 123\"}");
     }
 
     @Test
@@ -113,7 +113,7 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
         this.checkEquals(Optional.of(status), response.status(), "status");
 
         this.check(response,
-                "{ \"status-code\": 302, \"status-message\": \"Custom message 123\"}");
+            "{ \"status-code\": 302, \"status-message\": \"Custom message 123\"}");
     }
 
     // setEntity........................................................................................................
@@ -132,46 +132,46 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
         response.setEntity(HttpEntity.EMPTY.addHeader(HttpHeaderName.CONTENT_LENGTH, 1L));
 
         this.check(response, "{\n" +
-                "  \"headers\": {\n" +
-                "    \"Content-Length\": 1\n" +
-                "  }\n" +
-                "}");
+            "  \"headers\": {\n" +
+            "    \"Content-Length\": 1\n" +
+            "  }\n" +
+            "}");
     }
 
     @Test
     public void testSetEntityHeader2() {
         final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
         response.setEntity(HttpEntity.EMPTY
-                .addHeader(HttpHeaderName.CONTENT_TYPE, MediaType.TEXT_PLAIN)
-                .addHeader(HttpHeaderName.CONTENT_LENGTH, 1L));
+            .addHeader(HttpHeaderName.CONTENT_TYPE, MediaType.TEXT_PLAIN)
+            .addHeader(HttpHeaderName.CONTENT_LENGTH, 1L));
 
         this.check(response, "{\n" +
-                "  \"headers\": {\n" +
-                "    \"Content-Type\": \"text/plain\",\n" +
-                "    \"Content-Length\": 1\n" +
-                "  }\n" +
-                "}");
+            "  \"headers\": {\n" +
+            "    \"Content-Type\": \"text/plain\",\n" +
+            "    \"Content-Length\": 1\n" +
+            "  }\n" +
+            "}");
     }
 
     @Test
     public void testSetEntityHeader3() {
         final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
         response.setEntity(HttpEntity.EMPTY
-                .addHeader(HttpHeaderName.CONTENT_LENGTH, 1L)
-                .addHeader(HttpHeaderName.CONTENT_TYPE, MediaType.TEXT_PLAIN));
+            .addHeader(HttpHeaderName.CONTENT_LENGTH, 1L)
+            .addHeader(HttpHeaderName.CONTENT_TYPE, MediaType.TEXT_PLAIN));
 
         this.check(response, "{\n" +
-                "  \"headers\": {\n" +
-                "    \"Content-Length\": 1,\n" +
-                "    \"Content-Type\": \"text/plain\"\n" +
-                "  }\n" +
-                "}");
+            "  \"headers\": {\n" +
+            "    \"Content-Length\": 1,\n" +
+            "    \"Content-Type\": \"text/plain\"\n" +
+            "  }\n" +
+            "}");
     }
 
     private void check(final BrowserHttpServerHttpResponse response,
                        final String json) {
         this.checkEquals(JsonNode.parse(json),
-                response.object);
+            response.object);
     }
 
     // toString.........................................................................................................
@@ -181,19 +181,19 @@ public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTe
         final BrowserHttpServerHttpResponse response = BrowserHttpServerHttpResponse.empty();
         response.setStatus(HttpStatusCode.BAD_REQUEST.setMessage("Bad request 123"));
         response.setEntity(HttpEntity.EMPTY
-                .addHeader(HttpHeaderName.CONTENT_LENGTH, 1L)
-                .addHeader(HttpHeaderName.CONTENT_TYPE, MediaType.parse("text/plain123"))
-                .setBodyText("Body123"));
+            .addHeader(HttpHeaderName.CONTENT_LENGTH, 1L)
+            .addHeader(HttpHeaderName.CONTENT_TYPE, MediaType.parse("text/plain123"))
+            .setBodyText("Body123"));
 
         this.toStringAndCheck(response, "{\n" +
-                "  \"status-code\": 400,\n" +
-                "  \"status-message\": \"Bad request 123\",\n" +
-                "  \"headers\": {\n" +
-                "    \"Content-Length\": 1,\n" +
-                "    \"Content-Type\": \"text/plain123\"\n" +
-                "  },\n" +
-                "  \"body\": \"Body123\"\n" +
-                "}");
+            "  \"status-code\": 400,\n" +
+            "  \"status-message\": \"Bad request 123\",\n" +
+            "  \"headers\": {\n" +
+            "    \"Content-Length\": 1,\n" +
+            "    \"Content-Type\": \"text/plain123\"\n" +
+            "  },\n" +
+            "  \"body\": \"Body123\"\n" +
+            "}");
     }
 
 

@@ -30,7 +30,7 @@ import walkingkooka.tree.json.JsonNode;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTestCase<BrowserHttpServerHttpRequest>
-        implements ToStringTesting<BrowserHttpServerHttpRequest> {
+    implements ToStringTesting<BrowserHttpServerHttpRequest> {
 
     @Test
     public void testGetMethod() {
@@ -100,54 +100,54 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
                                  final HttpProtocolVersion version) {
         final BrowserHttpServerHttpRequest httpRequest = this.parse(request);
         this.checkEquals(version,
-                httpRequest.protocolVersion(),
-                () -> request);
+            httpRequest.protocolVersion(),
+            () -> request);
     }
 
     @Test
     public void testHeadersMissing() {
         final BrowserHttpServerHttpRequest request = this.parse("{}");
         this.checkEquals(Lists.empty(),
-                request.headers().get(HttpHeaderName.CONTENT_TYPE),
-                () -> request.toString());
+            request.headers().get(HttpHeaderName.CONTENT_TYPE),
+            () -> request.toString());
     }
 
     @Test
     public void testHeaderAbsent() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"headers\": {\"Content-Length\": 123}}");
         this.checkEquals(Lists.empty(),
-                request.headers().get(HttpHeaderName.CONTENT_TYPE),
-                () -> request.toString());
+            request.headers().get(HttpHeaderName.CONTENT_TYPE),
+            () -> request.toString());
     }
 
     @Test
     public void testHeaderNumericValue() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"headers\": {\"Content-Length\": 123}}");
         this.checkEquals(Lists.of(123L),
-                request.headers().get(HttpHeaderName.CONTENT_LENGTH),
-                () -> request.toString());
+            request.headers().get(HttpHeaderName.CONTENT_LENGTH),
+            () -> request.toString());
     }
 
     @Test
     public void testHeaderStringValue() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"headers\": {\"Content-Type\": \"text/plain\"}}");
         this.checkEquals(Lists.of(MediaType.TEXT_PLAIN),
-                request.headers().get(HttpHeaderName.CONTENT_TYPE),
-                () -> request.toString());
+            request.headers().get(HttpHeaderName.CONTENT_TYPE),
+            () -> request.toString());
     }
 
     @Test
     public void testHeaders() {
         final BrowserHttpServerHttpRequest request = this.parse("{ \"method\": \"POST\", \"headers\": {\"Content-Type\": \"text/plain\", \"Content-Length\": 123}}");
         this.checkEquals(HttpMethod.POST,
-                request.method(),
-                () -> request.toString());
+            request.method(),
+            () -> request.toString());
         this.checkEquals(Lists.of(MediaType.TEXT_PLAIN),
-                request.headers().get(HttpHeaderName.CONTENT_TYPE),
-                () -> request.toString());
+            request.headers().get(HttpHeaderName.CONTENT_TYPE),
+            () -> request.toString());
         this.checkEquals(Lists.of(123L),
-                request.headers().get(HttpHeaderName.CONTENT_LENGTH),
-                () -> request.toString());
+            request.headers().get(HttpHeaderName.CONTENT_LENGTH),
+            () -> request.toString());
     }
 
     @Test
@@ -188,14 +188,14 @@ public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTes
     @Test
     public void testToString() {
         this.toStringAndCheck(this.parse("{ \"method\": \"POST\", \"headers\": {\"Content-Type\": \"text/plain\", \"Content-Length\": 123}, \"body\": \"abc123\"}"),
-                "{\n" +
-                        "  \"method\": \"POST\",\n" +
-                        "  \"headers\": {\n" +
-                        "    \"Content-Type\": \"text/plain\",\n" +
-                        "    \"Content-Length\": 123\n" +
-                        "  },\n" +
-                        "  \"body\": \"abc123\"\n" +
-                        "}");
+            "{\n" +
+                "  \"method\": \"POST\",\n" +
+                "  \"headers\": {\n" +
+                "    \"Content-Type\": \"text/plain\",\n" +
+                "    \"Content-Length\": 123\n" +
+                "  },\n" +
+                "  \"body\": \"abc123\"\n" +
+                "}");
     }
 
     @Override

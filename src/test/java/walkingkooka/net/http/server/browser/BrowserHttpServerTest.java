@@ -123,7 +123,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         final BrowserHttpServer server = BrowserHttpServer.with((request, response) -> {
             response.setStatus(HttpStatusCode.CREATED.setMessage("Custom CREATED Message 123"));
             response.setEntity(
-                    HttpEntity.EMPTY.setBodyText("Response-" + request.bodyText())
+                HttpEntity.EMPTY.setBodyText("Response-" + request.bodyText())
             );
         }, port, MESSAGE_FILTER, TARGET_ORIGIN);
         server.start();
@@ -144,10 +144,10 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         server.stop();
 
         this.checkEquals(Lists.of("{\n" +
-                "  \"status-code\": 201,\n" +
-                "  \"status-message\": \"Custom CREATED Message 123\",\n" +
-                "  \"body\": \"Response-body-text-123\"\n" +
-                "}"), postedMessage);
+            "  \"status-code\": 201,\n" +
+            "  \"status-message\": \"Custom CREATED Message 123\",\n" +
+            "  \"body\": \"Response-body-text-123\"\n" +
+            "}"), postedMessage);
     }
 
     /**
@@ -188,27 +188,27 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         final MessagePort window = Js.cast(DomGlobal.window);
 
         final HttpServer server = BrowserHttpServers.messagePort((req, resp) -> {
-                    resp.setVersion(HttpProtocolVersion.VERSION_1_0);
-                    resp.setStatus(HttpStatusCode.withCode(999).setMessage("Custom Status Message"));
-                    resp.setEntity(
-                            HttpEntity.EMPTY.addHeader(
-                                    HttpHeaderName.SERVER,
-                                    "TestMessageServer"
-                            ).setBodyText("Response-" + req.bodyText()
-                            )
-                    );
-                }, window,
-                new Predicate<>() {
+                resp.setVersion(HttpProtocolVersion.VERSION_1_0);
+                resp.setStatus(HttpStatusCode.withCode(999).setMessage("Custom Status Message"));
+                resp.setEntity(
+                    HttpEntity.EMPTY.addHeader(
+                        HttpHeaderName.SERVER,
+                        "TestMessageServer"
+                    ).setBodyText("Response-" + req.bodyText()
+                    )
+                );
+            }, window,
+            new Predicate<>() {
 
-                    public boolean test(final MessageEvent<String> event) {
-                        DomGlobal.console.log("Message filter data: " + event.data);
-                        return this.counter++ == 0;
-                    }
+                public boolean test(final MessageEvent<String> event) {
+                    DomGlobal.console.log("Message filter data: " + event.data);
+                    return this.counter++ == 0;
+                }
 
-                    // the first message will be a HttpRequest, the next will be the HttpResponse sent back which we want to ignore.
-                    int counter;
-                },
-                "*");
+                // the first message will be a HttpRequest, the next will be the HttpResponse sent back which we want to ignore.
+                int counter;
+            },
+            "*");
 
         server.start();
 
@@ -228,15 +228,15 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         DomGlobal.postMessage(request, "*");
 
         return new Promise<>(
-                (resolve, reject) -> {
-                    DomGlobal.setTimeout((ignored) -> {
-                                final String response = "HTTP/1.0 999 Custom Status Message\r\nServer: TestMessageServer\r\n\r\nResponse-Body1234";
-                                this.checkEquals(Lists.of(request, response), messages);
-                                server.stop();
-                                resolve.onInvoke((Void) null);
-                            },
-                            500);
-                });
+            (resolve, reject) -> {
+                DomGlobal.setTimeout((ignored) -> {
+                        final String response = "HTTP/1.0 999 Custom Status Message\r\nServer: TestMessageServer\r\n\r\nResponse-Body1234";
+                        this.checkEquals(Lists.of(request, response), messages);
+                        server.stop();
+                        resolve.onInvoke((Void) null);
+                    },
+                    500);
+            });
     }
 
     @Test

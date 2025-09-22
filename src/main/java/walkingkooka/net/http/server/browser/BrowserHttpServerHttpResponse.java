@@ -53,8 +53,8 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
         Objects.requireNonNull(version, "version");
 
         this.object = this.object.set(
-                VERSION,
-                version.value()
+            VERSION,
+            version.value()
         );
     }
 
@@ -74,23 +74,23 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
         Objects.requireNonNull(status, "status");
 
         this.object = this.object.set(
-                STATUS_CODE,
-                status.value().code()
+            STATUS_CODE,
+            status.value().code()
         ).set(
-                STATUS_MESSAGE,
-                status.message()
+            STATUS_MESSAGE,
+            status.message()
         );
     }
 
     @Override
     public Optional<HttpStatus> status() {
         return this.object.get(STATUS_CODE)
-                .map(BrowserHttpServerHttpResponse::status0);
+            .map(BrowserHttpServerHttpResponse::status0);
     }
 
     private static HttpStatus status0(final JsonNode node) {
         return HttpStatusCode.withCode(node.numberOrFail().intValue())
-                .setMessage(node.parentOrFail().objectOrFail().getOrFail(STATUS_MESSAGE).stringOrFail());
+            .setMessage(node.parentOrFail().objectOrFail().getOrFail(STATUS_MESSAGE).stringOrFail());
     }
 
     private final static JsonPropertyName STATUS_CODE = JsonPropertyName.with("status-code");
@@ -118,8 +118,8 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
                 case 1:
                     final Object value = values.get(0);
                     final JsonNode valueJsonNode = value instanceof Number ?
-                            JsonNode.number(((Number) value).doubleValue()) :
-                            JsonNode.string(header.headerText(Cast.to(value)));
+                        JsonNode.number(((Number) value).doubleValue()) :
+                        JsonNode.string(header.headerText(Cast.to(value)));
 
                     headers.add(valueJsonNode.setName(JsonPropertyName.with(header.value())));
                     break;
@@ -151,10 +151,10 @@ final class BrowserHttpServerHttpResponse implements HttpResponse {
                 final HttpHeaderName<?> header = HttpHeaderName.with(headerAndValue.name().value());
                 final String value = headerAndValue.text();
                 entity = entity.addHeader(
-                        header,
-                        Cast.to(
-                                header.parseValue(value)
-                        )
+                    header,
+                    Cast.to(
+                        header.parseValue(value)
+                    )
                 );
             }
         }

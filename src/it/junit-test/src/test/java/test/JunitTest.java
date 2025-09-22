@@ -50,28 +50,28 @@ public final class JunitTest {
         final MessagePort window = Js.cast(DomGlobal.window);
 
         final HttpServer server = BrowserHttpServers.messagePort((req, resp) -> {
-                    resp.setVersion(HttpProtocolVersion.VERSION_1_0);
-                    resp.setStatus(
-                            HttpStatusCode.withCode(999)
-                                    .setMessage("Custom Status Message")
-                    );
-                    resp.setEntity(
-                            HttpEntity.EMPTY.addHeader(
-                                    HttpHeaderName.SERVER,
-                                    "TestMessageServer"
-                            ).setBodyText("Response-" + req.bodyText()));
-                }, window,
-                new Predicate<MessageEvent<String>>() {
+                resp.setVersion(HttpProtocolVersion.VERSION_1_0);
+                resp.setStatus(
+                    HttpStatusCode.withCode(999)
+                        .setMessage("Custom Status Message")
+                );
+                resp.setEntity(
+                    HttpEntity.EMPTY.addHeader(
+                        HttpHeaderName.SERVER,
+                        "TestMessageServer"
+                    ).setBodyText("Response-" + req.bodyText()));
+            }, window,
+            new Predicate<MessageEvent<String>>() {
 
-                    public boolean test(final MessageEvent<String> event) {
-                        DomGlobal.console.log("Message filter data: " + event.data);
-                        return this.counter++ == 0;
-                    }
+                public boolean test(final MessageEvent<String> event) {
+                    DomGlobal.console.log("Message filter data: " + event.data);
+                    return this.counter++ == 0;
+                }
 
-                    // the first message will be a HttpRequest, the next will be the HttpResponse sent back which we want to ignore.
-                    int counter;
-                },
-                "*");
+                // the first message will be a HttpRequest, the next will be the HttpResponse sent back which we want to ignore.
+                int counter;
+            },
+            "*");
 
         server.start();
 
@@ -88,35 +88,35 @@ public final class JunitTest {
         }, false);
 
         final String request = "{\n" +
-                "  \"version\": \"HTTP/1.0\",\n" +
-                "  \"method\": \"POST\",\n" +
-                "  \"headers\": {\n" +
-                "    \"Content-Type\": \"text/plain\",\n" +
-                "    \"Content-Length\": 123\n" +
-                "  },\n" +
-                "  \"body\": \"Body123\"\n" +
-                "}";
+            "  \"version\": \"HTTP/1.0\",\n" +
+            "  \"method\": \"POST\",\n" +
+            "  \"headers\": {\n" +
+            "    \"Content-Type\": \"text/plain\",\n" +
+            "    \"Content-Length\": 123\n" +
+            "  },\n" +
+            "  \"body\": \"Body123\"\n" +
+            "}";
         final String response = "{\n" +
-                "  \"version\": \"HTTP/1.0\",\n" +
-                "  \"status-code\": 999,\n" +
-                "  \"status-message\": \"Custom Status Message\",\n" +
-                "  \"headers\": {\n" +
-                "    \"Server\": \"TestMessageServer\"\n" +
-                "  },\n" +
-                "  \"body\": \"Response-Body123\"\n" +
-                "}";
+            "  \"version\": \"HTTP/1.0\",\n" +
+            "  \"status-code\": 999,\n" +
+            "  \"status-message\": \"Custom Status Message\",\n" +
+            "  \"headers\": {\n" +
+            "    \"Server\": \"TestMessageServer\"\n" +
+            "  },\n" +
+            "  \"body\": \"Response-Body123\"\n" +
+            "}";
 
         DomGlobal.postMessage(request, "*");
 
         return new Promise<Void>(
-                (resolve, reject) -> {
-                    DomGlobal.setTimeout((ignored) -> {
-                                Assert.assertEquals(Lists.of(pretty(request), pretty(response)), messages);
-                                server.stop();
-                                resolve.onInvoke((Void) null);
-                            },
-                            500);
-                });
+            (resolve, reject) -> {
+                DomGlobal.setTimeout((ignored) -> {
+                        Assert.assertEquals(Lists.of(pretty(request), pretty(response)), messages);
+                        server.stop();
+                        resolve.onInvoke((Void) null);
+                    },
+                    500);
+            });
     }
 
     private static String pretty(final String json) {
