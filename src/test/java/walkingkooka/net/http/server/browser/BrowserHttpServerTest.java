@@ -26,12 +26,14 @@ import elemental2.dom.Window;
 import elemental2.promise.Promise;
 import jsinterop.base.Js;
 import org.junit.jupiter.api.Test;
+import walkingkooka.Cast;
 import walkingkooka.ToStringTesting;
 import walkingkooka.collect.list.Lists;
 import walkingkooka.net.header.HttpHeaderName;
 import walkingkooka.net.http.HttpEntity;
 import walkingkooka.net.http.HttpProtocolVersion;
 import walkingkooka.net.http.HttpStatusCode;
+import walkingkooka.net.http.server.FakeHttpHandlerContext;
 import walkingkooka.net.http.server.HttpHandler;
 import walkingkooka.net.http.server.HttpServer;
 import walkingkooka.predicate.Predicates;
@@ -44,51 +46,111 @@ import java.util.function.Predicate;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpServer>, ToStringTesting<BrowserHttpServer> {
+public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpServer<FakeHttpHandlerContext>>,
+    ToStringTesting<BrowserHttpServer<FakeHttpHandlerContext>> {
 
-    private final static HttpHandler HANDLER = (request, response) -> {
+    private final static HttpHandler<FakeHttpHandlerContext> HANDLER = (request, response, context) -> {
         throw new UnsupportedOperationException();
     };
+
+    private final static FakeHttpHandlerContext HANDLER_CONTEXT = new FakeHttpHandlerContext();
 
     private final static Predicate<MessageEvent<String>> MESSAGE_FILTER = Predicates.always();
     private final static String TARGET_ORIGIN = "*";
 
     @Test
     public void testWithNullProcessorFails() {
-        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(null, new TestMessagePort(), MESSAGE_FILTER, TARGET_ORIGIN));
+        assertThrows(
+            NullPointerException.class,
+            () -> BrowserHttpServer.with(
+                null,
+                HANDLER_CONTEXT,
+                new TestMessagePort(),
+                MESSAGE_FILTER,
+                TARGET_ORIGIN
+            )
+        );
     }
 
     @Test
     public void testWithNullMessagePortFails() {
-        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(HANDLER, null, MESSAGE_FILTER, TARGET_ORIGIN));
+        assertThrows(
+            NullPointerException.class,
+            () -> BrowserHttpServer.with(
+                HANDLER,
+                HANDLER_CONTEXT,
+                null,
+                MESSAGE_FILTER,
+                TARGET_ORIGIN
+            )
+        );
     }
 
     @Test
     public void testWithNullMessageFilterFails() {
-        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(HANDLER, new TestMessagePort(), null, TARGET_ORIGIN));
+        assertThrows(
+            NullPointerException.class,
+            () -> BrowserHttpServer.with(
+                HANDLER,
+                HANDLER_CONTEXT,
+                new TestMessagePort(),
+                null,
+                TARGET_ORIGIN
+            )
+        );
     }
 
     @Test
     public void testWithNullTargetOriginFails() {
-        assertThrows(NullPointerException.class, () -> BrowserHttpServer.with(HANDLER, new TestMessagePort(), MESSAGE_FILTER, null));
+        assertThrows(
+            NullPointerException.class,
+            () -> BrowserHttpServer.with(
+                HANDLER,
+                HANDLER_CONTEXT,
+                new TestMessagePort(),
+                MESSAGE_FILTER,
+                null
+            )
+        );
     }
 
     @Test
     public void testWithEmptyTargetOriginFails() {
-        assertThrows(IllegalArgumentException.class, () -> BrowserHttpServer.with(HANDLER, new TestMessagePort(), MESSAGE_FILTER, ""));
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> BrowserHttpServer.with(
+                HANDLER,
+                HANDLER_CONTEXT,
+                new TestMessagePort(),
+                MESSAGE_FILTER,
+                ""
+            )
+        );
     }
 
     @Test
     public void testStart() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(HANDLER, port, MESSAGE_FILTER, TARGET_ORIGIN);
+        final BrowserHttpServer<FakeHttpHandlerContext> server = BrowserHttpServer.with(
+            HANDLER,
+            HANDLER_CONTEXT,
+            port,
+            MESSAGE_FILTER,
+            TARGET_ORIGIN
+        );
         server.start();
     }
 
     @Test
     public void testStartTwiceFails() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(HANDLER, port, MESSAGE_FILTER, TARGET_ORIGIN);
+        final BrowserHttpServer<FakeHttpHandlerContext> server = BrowserHttpServer.with(
+            HANDLER,
+            HANDLER_CONTEXT,
+            port,
+            MESSAGE_FILTER,
+            TARGET_ORIGIN
+        );
         server.start();
         assertThrows(IllegalStateException.class, () -> server.start());
     }
@@ -96,14 +158,26 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
     @Test
     public void testStopWithStartFails() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(HANDLER, port, MESSAGE_FILTER, TARGET_ORIGIN);
+        final BrowserHttpServer<FakeHttpHandlerContext> server = BrowserHttpServer.with(
+            HANDLER,
+            HANDLER_CONTEXT,
+            port,
+            MESSAGE_FILTER,
+            TARGET_ORIGIN
+        );
         assertThrows(IllegalStateException.class, () -> server.stop());
     }
 
     @Test
     public void testStop() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(HANDLER, port, MESSAGE_FILTER, TARGET_ORIGIN);
+        final BrowserHttpServer<FakeHttpHandlerContext> server = BrowserHttpServer.with(
+            HANDLER,
+            HANDLER_CONTEXT,
+            port,
+            MESSAGE_FILTER,
+            TARGET_ORIGIN
+        );
         server.start();
         server.stop();
     }
@@ -111,7 +185,13 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
     @Test
     public void testStopTwiceFails() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with(HANDLER, port, MESSAGE_FILTER, TARGET_ORIGIN);
+        final BrowserHttpServer<FakeHttpHandlerContext> server = BrowserHttpServer.with(
+            HANDLER,
+            HANDLER_CONTEXT,
+            port,
+            MESSAGE_FILTER,
+            TARGET_ORIGIN
+        );
         server.start();
         server.stop();
         assertThrows(IllegalStateException.class, () -> server.stop());
@@ -120,12 +200,17 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
     @Test
     public void testHandleMessageEvent() {
         final TestMessagePort port = new TestMessagePort();
-        final BrowserHttpServer server = BrowserHttpServer.with((request, response) -> {
-            response.setStatus(HttpStatusCode.CREATED.setMessage("Custom CREATED Message 123"));
-            response.setEntity(
-                HttpEntity.EMPTY.setBodyText("Response-" + request.bodyText())
-            );
-        }, port, MESSAGE_FILTER, TARGET_ORIGIN);
+        final BrowserHttpServer<FakeHttpHandlerContext> server = BrowserHttpServer.with((request, response, context) -> {
+                response.setStatus(HttpStatusCode.CREATED.setMessage("Custom CREATED Message 123"));
+                response.setEntity(
+                    HttpEntity.EMPTY.setBodyText("Response-" + request.bodyText())
+                );
+            },
+            HANDLER_CONTEXT,
+            port,
+            MESSAGE_FILTER,
+            TARGET_ORIGIN
+        );
         server.start();
 
         final List<String> postedMessage = Lists.array();
@@ -187,7 +272,8 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
     public Promise<Void> testWindow() {
         final MessagePort window = Js.cast(DomGlobal.window);
 
-        final HttpServer server = BrowserHttpServers.messagePort((req, resp) -> {
+        final HttpServer server = BrowserHttpServers.messagePort(
+            (req, resp, context) -> {
                 resp.setVersion(HttpProtocolVersion.VERSION_1_0);
                 resp.setStatus(HttpStatusCode.withCode(999).setMessage("Custom Status Message"));
                 resp.setEntity(
@@ -197,9 +283,12 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
                     ).setBodyText("Response-" + req.bodyText()
                     )
                 );
-            }, window,
+            },
+            new FakeHttpHandlerContext(),
+            window,
             new Predicate<>() {
 
+                @Override
                 public boolean test(final MessageEvent<String> event) {
                     DomGlobal.console.log("Message filter data: " + event.data);
                     return this.counter++ == 0;
@@ -241,14 +330,22 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
 
     @Test
     public void testToString() {
-        this.toStringAndCheck(BrowserHttpServer.with(HANDLER, new TestMessagePort(), MESSAGE_FILTER, TARGET_ORIGIN), HANDLER.toString());
+        this.toStringAndCheck(BrowserHttpServer.with(
+                HANDLER,
+                HANDLER_CONTEXT,
+                new TestMessagePort(),
+                MESSAGE_FILTER,
+                TARGET_ORIGIN
+            ),
+            HANDLER.toString()
+        );
     }
 
     // ClassTesting.....................................................................................................
 
     @Override
-    public Class<BrowserHttpServer> type() {
-        return BrowserHttpServer.class;
+    public Class<BrowserHttpServer<FakeHttpHandlerContext>> type() {
+        return Cast.to(BrowserHttpServer.class);
     }
 
     @Override

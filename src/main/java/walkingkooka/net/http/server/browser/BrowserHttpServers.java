@@ -19,7 +19,9 @@ package walkingkooka.net.http.server.browser;
 
 import elemental2.dom.MessageEvent;
 import elemental2.dom.MessagePort;
+import org.checkerframework.checker.units.qual.C;
 import walkingkooka.net.http.server.HttpHandler;
+import walkingkooka.net.http.server.HttpHandlerContext;
 import walkingkooka.net.http.server.HttpServer;
 import walkingkooka.reflect.PublicStaticHelper;
 
@@ -34,12 +36,14 @@ public final class BrowserHttpServers implements PublicStaticHelper {
     /**
      * {@see BrowserHttpServer}
      */
-    public static HttpServer messagePort(final HttpHandler httpHandler,
-                                         final MessagePort port,
-                                         final Predicate<MessageEvent<String>> messageFilter,
-                                         final String postMessageTargetOrigin) {
+    public static <C extends HttpHandlerContext> HttpServer messagePort(final HttpHandler<C> httpHandler,
+                                                                        final C context,
+                                                                        final MessagePort port,
+                                                                        final Predicate<MessageEvent<String>> messageFilter,
+                                                                        final String postMessageTargetOrigin) {
         return BrowserHttpServer.with(
             httpHandler,
+            context,
             port,
             messageFilter,
             postMessageTargetOrigin

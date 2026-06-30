@@ -23,7 +23,10 @@ import elemental2.dom.EventListener;
 import elemental2.dom.MessageEvent;
 import elemental2.dom.MessagePort;
 import jsinterop.base.Js;
+import org.checkerframework.checker.units.qual.C;
+import walkingkooka.net.http.server.FakeHttpHandlerContext;
 import walkingkooka.net.http.server.HttpHandler;
+import walkingkooka.net.http.server.HttpHandlerContext;
 import walkingkooka.net.http.server.HttpRequest;
 import walkingkooka.net.http.server.HttpResponse;
 import walkingkooka.net.http.server.HttpServer;
@@ -37,17 +40,19 @@ import java.util.function.Predicate;
  * A {@link HttpServer} that accepts messages from a {@link MessagePort}, processing the request and then calls {@link MessagePort#postMessage}
  * back the response. The {@link MessagePort} can be a {@link elemental2.dom.Window} or {@link elemental2.dom.Worker}.
  */
-final class BrowserHttpServer implements HttpServer {
+final class BrowserHttpServer<C extends HttpHandlerContext> implements HttpServer {
 
     /**
      * Creates a new {@link BrowserHttpServer}.
      */
-    static BrowserHttpServer with(final HttpHandler httpHandler,
-                                  final MessagePort port,
-                                  final Predicate<MessageEvent<String>> messageFilter,
-                                  final String postMessageTargetOrigin) {
-        return new BrowserHttpServer(
+    static <C extends HttpHandlerContext> BrowserHttpServer<C> with(final HttpHandler<C> httpHandler,
+                                                                    final C context,
+                                                                    final MessagePort port,
+                                                                    final Predicate<MessageEvent<String>> messageFilter,
+                                                                    final String postMessageTargetOrigin) {
+        return new BrowserHttpServer<>(
             Objects.requireNonNull(httpHandler, "httpHandler"),
+            Objects.requireNonNull(context, "context"),
             Objects.requireNonNull(port, "port"),
             Objects.requireNonNull(messageFilter, "messageFilter"),
             CharSequences.failIfNullOrEmpty(postMessageTargetOrigin, "postMessageTargetOrigin")
@@ -57,12 +62,15 @@ final class BrowserHttpServer implements HttpServer {
     /**
      * Use factory
      */
-    private BrowserHttpServer(final HttpHandler httpHandler,
+    private BrowserHttpServer(final HttpHandler<C> httpHandler,
+                              final C context,
                               final MessagePort port,
                               final Predicate<MessageEvent<String>> messageFilter,
                               final String postMessageTargetOrigin) {
         super();
         this.httpHandler = httpHandler;
+        this.context = context;
+
         this.port = port;
         this.messageFilter = messageFilter;
         this.postMessageTargetOrigin = postMessageTargetOrigin;
@@ -115,7 +123,11 @@ final class BrowserHttpServer implements HttpServer {
             final HttpResponse response = BrowserHttpServerHttpResponse.empty();
 
             // process
-            this.httpHandler.handle(request, response);
+            this.httpHandler.handle(
+                request,
+                response,
+                context
+            );
 
             // outputs
             event.source.postMessage(response.toString(), this.postMessageTargetOrigin);
@@ -127,7 +139,9 @@ final class BrowserHttpServer implements HttpServer {
     /**
      * Handles the request and produces a response.
      */
-    private final HttpHandler httpHandler;
+    private final HttpHandler<C> httpHandler;
+
+    private final C context;
 
     /**
      * The {@link MessagePort#postMessage(Object, Transferable[])}
