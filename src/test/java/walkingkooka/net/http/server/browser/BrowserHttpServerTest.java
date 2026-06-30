@@ -194,7 +194,10 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         );
         server.start();
         server.stop();
-        assertThrows(IllegalStateException.class, () -> server.stop());
+        assertThrows(
+            IllegalStateException.class,
+            () -> server.stop()
+        );
     }
 
     @Test
@@ -304,36 +307,43 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         final List<String> messages = Lists.array();
 
         // will capture ALL messages, including the request and the response posted back
-        window.addEventListener("message", new EventListener() {
-            @Override
-            public void handleEvent(final Event event) {
-                final MessageEvent<String> messageEvent = Js.cast(event);
-                DomGlobal.console.log("window message handleEvent: " + messageEvent.data);
-                messages.add(messageEvent.data);
-            }
-        }, false);
+        window.addEventListener(
+            "message", new EventListener() {
+                @Override
+                public void handleEvent(final Event event) {
+                    final MessageEvent<String> messageEvent = Js.cast(event);
+                    DomGlobal.console.log("window message handleEvent: " + messageEvent.data);
+                    messages.add(messageEvent.data);
+                }
+            },
+            false
+        );
 
         final String request = "GET /path1/file2 HTTP/1.0\r\nContent-Length: 1\r\nContent-Type: text/plain\r\n\r\nBody1234";
         DomGlobal.postMessage(request, "*");
 
         return new Promise<>(
-            (resolve, reject) -> {
+            (resolve, reject) ->
                 DomGlobal.setTimeout((ignored) -> {
                         final String response = "HTTP/1.0 999 Custom Status Message\r\nServer: TestMessageServer\r\n\r\nResponse-Body1234";
                         this.checkEquals(Lists.of(request, response), messages);
                         server.stop();
                         resolve.onInvoke((Void) null);
                     },
-                    500);
-            });
+                    500
+                )
+        );
     }
+
+    // toString.........................................................................................................
 
     @Test
     public void testToString() {
-        this.toStringAndCheck(BrowserHttpServer.with(
+        this.toStringAndCheck(
+            BrowserHttpServer.with(
                 HANDLER,
                 HANDLER_CONTEXT,
-                new TestMessagePort(),
+                new BrowserHttpServerTest.TestMessagePort(),
                 MESSAGE_FILTER,
                 TARGET_ORIGIN
             ),
@@ -341,7 +351,7 @@ public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpSer
         );
     }
 
-    // ClassTesting.....................................................................................................
+    // Class............................................................................................................
 
     @Override
     public Class<BrowserHttpServer<FakeHttpHandlerContext>> type() {
