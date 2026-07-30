@@ -115,7 +115,10 @@ final class BrowserHttpServerHttpRequest implements HttpRequest {
 
     @Override
     public long bodyLength() {
-        return this.bodyText().getBytes(this.charset(HttpEntity.DEFAULT_BODY_CHARSET)).length;
+        return this.bodyText()
+            .getBytes(
+                this.charset()
+            ).length;
     }
 
     @Override
