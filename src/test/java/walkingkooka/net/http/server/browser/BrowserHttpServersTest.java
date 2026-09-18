@@ -32,9 +32,4 @@ public final class BrowserHttpServersTest implements PublicStaticHelperTesting<B
     public boolean canHavePublicTypes(final Method method) {
         return false;
     }
-
-    @Override
-    public JavaVisibility typeVisibility() {
-        return JavaVisibility.PUBLIC;
-    }
 }
