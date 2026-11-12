@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class BrowserHttpServerTest implements ClassTesting2<BrowserHttpServer<FakeHttpHandlerContext>>,
-    ToStringTesting<BrowserHttpServer<FakeHttpHandlerContext>> {
+    ToStringTesting {
 
     private final static HttpHandler<FakeHttpHandlerContext> HANDLER = (request, response, context) -> {
         throw new UnsupportedOperationException();
