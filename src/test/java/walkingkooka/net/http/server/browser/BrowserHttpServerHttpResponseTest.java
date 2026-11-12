@@ -30,7 +30,7 @@ import walkingkooka.tree.json.JsonNode;
 import java.util.Optional;
 
 public final class BrowserHttpServerHttpResponseTest extends BrowserHttpServerTestCase<BrowserHttpServerHttpResponse>
-    implements ToStringTesting<BrowserHttpServerHttpResponse> {
+    implements ToStringTesting {
 
     @Test
     public void testEmpty() {

@@ -30,7 +30,7 @@ import walkingkooka.tree.json.JsonNode;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class BrowserHttpServerHttpRequestTest extends BrowserHttpServerTestCase<BrowserHttpServerHttpRequest>
-    implements ToStringTesting<BrowserHttpServerHttpRequest> {
+    implements ToStringTesting {
 
     @Test
     public void testGetMethod() {
